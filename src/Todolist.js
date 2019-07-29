@@ -1,6 +1,8 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component } from 'react';
 import Todoitem from './Todoitem';
 import axios from 'axios'
+import 'antd/dist/antd.css';
+import { Input, Button } from 'antd';
 
 class Todolist extends Component {
 
@@ -68,20 +70,21 @@ class Todolist extends Component {
 
     render() {
         return (
-            <Fragment>
-                <label htmlFor='inputArea'>输入内容：</label>
-                <input
-                    id='inputArea'
+            <div style={{marginTop: 10, marginLeft: 10}}>
+                <Input
+                    placeholder='todo info'
+                    style={{width: 300, marginRight: 10}}
                     value={this.state.inputValue}
                     onChange={this.handleInputChange}
                 />
-                <button
+                <Button
+                    type='primary'
                     onClick={this.handleOnclick}
                 >
                     提交
-                </button>
+                </Button>
                 <ul>{this.getTodoiterm()}</ul>
-            </Fragment>
+            </div>
         );
     }
 }
