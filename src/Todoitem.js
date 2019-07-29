@@ -12,13 +12,17 @@ class Todoitem extends Component {
         this.props.deleteItem(this.props.index);
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextProps.content !== this.props.content;
+    }
+
     render() {
         return (
             <Fragment>
-                <div
+                <li
                     onClick={this.handleClick}>
-                    {this.props.content} - {this.props.test}
-                </div>
+                    {this.props.content}
+                </li>
             </Fragment>
         );
     }

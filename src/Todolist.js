@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import Todoitem from './Todoitem';
+import axios from 'axios'
 
 class Todolist extends Component {
 
@@ -13,6 +14,18 @@ class Todolist extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleOnclick = this.handleOnclick.bind(this);
         this.handleDel = this.handleDel.bind(this);
+    }
+
+    componentDidMount() {
+        axios.get('https://easy-mock.com/mock/5d079802f758fa79fe16e8c9/api/todolist')
+            .then((res) => {
+                this.setState(() => ({
+                    list: [...res.data],
+                }))
+            })
+            .catch(() => {
+                alert('error')
+            })
     }
 
     handleInputChange(e) {
