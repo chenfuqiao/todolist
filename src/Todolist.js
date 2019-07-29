@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-// import 'antd/dist/antd.css';
 import TodolistUI from './TodolistUI'
 import store from './store';
-import { getInputChangeAction, getAddItemAction, getDeleteItemAction } from './store/actionCreators'
+import { getInputChangeAction, getAddItemAction, getDeleteItemAction, initListAction } from './store/actionCreators'
+import axios from 'axios';
 
 class Todolist extends Component {
 
@@ -36,6 +36,18 @@ class Todolist extends Component {
     handleDel(index) {
         const action = getDeleteItemAction(index);
         store.dispatch(action);
+    }
+
+    componentDidMount() {
+        axios.get(' https://easy-mock.com/mock/5d079802f758fa79fe16e8c9/api/todolist')
+            .then((res) => {
+                const data = res.data;
+                const action = initListAction(data);
+                store.dispatch(action);
+            })
+            .catch(() => {
+                alert('error')
+            })
     }
 
     render() {

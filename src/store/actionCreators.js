@@ -1,4 +1,4 @@
-import { CHENGE_INPUT_VALUE, ADD_TODOITEM, DELETE_TODOITEM } from './actionTypes';
+import { CHENGE_INPUT_VALUE, ADD_TODOITEM, DELETE_TODOITEM, INIT_LIST } from './actionTypes';
 
 export const getInputChangeAction = (value) => ({
     type: CHENGE_INPUT_VALUE,
@@ -12,4 +12,9 @@ export const getAddItemAction = () => ({
 export const getDeleteItemAction = (index) => ({
     type: DELETE_TODOITEM,
     index: index,
+});
+
+export const initListAction = (data) => ({
+    type: INIT_LIST,
+    init_data: data,
 });
