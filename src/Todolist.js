@@ -1,58 +1,58 @@
-import React, { Component } from 'react';
-import TodolistUI from './TodolistUI'
-import store from './store';
-import { getInputChangeAction, getAddItemAction, getDeleteItemAction, getInitListAction } from './store/actionCreators';
+import React from 'react';
+import { connect } from 'react-redux';
 
-class Todolist extends Component {
+// 无状态组件，成为UI组件
+const Todolist = (props) => {
+    const { inputValue, list, changeInputValue, handleClick, handleDel } = props;
+    return (
+        <div>
+            <input value={inputValue} onChange={changeInputValue}/>
+            <button onClick={handleClick}>提交</button>
+            <ul>
+                {
+                    list.map((item, index) => {
+                        return <li key={index} onClick={() => handleDel(index)}>{item}</li>
+                    })
+                }
+            </ul>
+        </div>
+    );
+};
 
-    constructor(props) {
-        super(props);   //继承父类
-        this.state = store.getState();
+// connect连接的规则：把store的数据映射成该组件的props，参数state就是指store里的数据
+const mapStatetoProps = (state) => {
+    return {
+        inputValue: state.inputValue,
+        list: state.list,
+    };
+};
 
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleStoreChange = this.handleStoreChange.bind(this);
-        this.handleOnclick = this.handleOnclick.bind(this);
-        this.handleDel = this.handleDel.bind(this);
-        store.subscribe(this.handleStoreChange);    //订阅store，store的内容发生改变就会去触发handleStoreChange这个回调函数
-    }
+// connect连接的规则：把store.dispatch映射该组件的props
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeInputValue(e) {
+            const action = {
+                type: 'change_input_value',
+                inputValue: e.target.value,
+            };
+            dispatch(action);
+        },
+        handleClick() {
+            const action = {
+                type: 'add_item',
+            };
+            dispatch(action);
+        },
+        handleDel(index) {
+            const action = {
+                type: 'del_item',
+                index: index,
+            };
+            dispatch(action);
+        },
+    };
+};
 
-    // 重新获取一遍store里的数据
-    handleStoreChange() {
-        this.setState(store.getState());
-    }
-
-    handleInputChange(e) {
-        const value = e.target.value;
-        const action = getInputChangeAction(value);
-        store.dispatch(action);
-    }
-
-    handleOnclick() {
-        const action = getAddItemAction();
-        store.dispatch(action);
-    }
-
-    handleDel(index) {
-        const action = getDeleteItemAction(index);
-        store.dispatch(action);
-    }
-
-    componentDidMount() {
-        const action = getInitListAction();
-        store.dispatch(action);
-    }
-
-    render() {
-        return (
-            <TodolistUI
-                inputValue={this.state.inputValue}
-                handleInputChange={this.handleInputChange}
-                handleOnclick={this.handleOnclick}
-                list={this.state.list}
-                handleDel={this.handleDel}
-            />
-        );
-    }
-}
-
-export default Todolist;    //导出组件
+// 让Todolist和store做连接
+// connect返回的是容器组件
+export default connect(mapStatetoProps, mapDispatchToProps)(Todolist);
